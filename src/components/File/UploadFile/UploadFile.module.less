@@ -1,0 +1,47 @@
+.root {
+  display: flex;
+
+  .filter {
+    filter: invert(55%) sepia(47%) saturate(4152%) hue-rotate(322deg) brightness(102%) contrast(113%);
+  }
+
+  .newFileBtn {
+    img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .disabledFile {
+    img {
+      .filter();
+    }
+  }
+
+  .input {
+    display: none;
+  }
+
+  .fileItem {
+    display: flex;
+    position: relative;
+    top: 6px;
+    flex-direction: column;
+    cursor: pointer;
+
+    &:hover {
+      img {
+        .filter();
+      }
+    }
+
+    img {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  .loader {
+    padding: 11px;
+  }
+}

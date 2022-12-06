@@ -1,0 +1,64 @@
+.root {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  grid-template-rows: 50px 80px 50px;
+
+  .input {
+    border-radius: 10px;
+    border: none;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: 0.1px;
+  }
+
+  .inputTitle {
+    .input();
+    grid-column: 1;
+    grid-row: 1;
+    align-self: center;
+    justify-self: center;
+    padding: 20px 12px;
+    width: 95%;
+    height: 38px;
+    background: #EBEFF2;
+  }
+
+  .inputDesc {
+    .input();
+    grid-column: 1;
+    grid-row: 2;
+    align-self: center;
+    justify-self: center;
+    width: 95%;
+    height: 70px;
+    padding: 10px 7px;
+    background: #EBEFF2;
+    resize: none;
+  }
+
+  .bottomFields {
+    grid-column: 1;
+    grid-row: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .submitBtn {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: center;
+    justify-self: start;
+    width: 120px;
+    height: 70px;
+    background: #20EEB0;
+    border-radius: 10px;
+    line-height: normal;
+  }
+
+  .disabledBtn {
+    background: grey;
+    cursor: not-allowed;
+  }
+}
