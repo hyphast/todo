@@ -10,20 +10,19 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  orderBy,
+  query,
+  serverTimestamp,
   updateDoc,
 } from 'firebase/firestore'
 import { db, storage } from './firebase'
 import { ITodo } from '../reducer'
 
-type UploadFileReturn = {
-  name: string
-  url: string
-}
-
 export const storageAPI = {
-  async uploadFile(file: File): Promise<UploadFileReturn> {
+  async uploadFile(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
-      const storageRef = ref(storage, `files/${file.name}`)
+      const fileName = Date.now() + file.name
+      const storageRef = ref(storage, `files/${fileName}`)
       const uploadTask = uploadBytesResumable(storageRef, file)
 
       uploadTask.on(
@@ -33,10 +32,7 @@ export const storageAPI = {
           reject(error)
         },
         () => {
-          getBlob(uploadTask.snapshot.ref).then((blob) => {
-            const url = window.URL.createObjectURL(blob)
-            resolve({ name: uploadTask.snapshot.ref.name, url })
-          })
+          resolve(fileName)
         }
       )
     })
@@ -49,6 +45,9 @@ export const storageAPI = {
       console.log(e)
       return null
     }
+  },
+  async getFile(name: string) {
+    return getBlob(ref(storage, `files/${name}`))
   },
   async deleteFile(name: string) {
     try {
@@ -66,7 +65,8 @@ export const storageAPI = {
 export const todoAPI = {
   async getTodos() {
     try {
-      const querySnapshot = await getDocs(collection(db, 'todos'))
+      const q = query(collection(db, 'todos'), orderBy('timestamp', 'desc'))
+      const querySnapshot = await getDocs(q)
       const todos: ITodo[] = []
       querySnapshot.forEach((d) => {
         const data = d.data() as Omit<ITodo, 'id'>
@@ -78,9 +78,12 @@ export const todoAPI = {
       return { todos: [] }
     }
   },
-  async createTodo(data: Omit<ITodo, 'id'>) {
+  async createTodo(data: Omit<ITodo, 'id' | 'timestamp'>) {
     try {
-      const docRef = await addDoc(collection(db, 'todos'), data)
+      const docRef = await addDoc(collection(db, 'todos'), {
+        ...data,
+        timestamp: serverTimestamp()
+      })
       return docRef.id
     } catch (e) {
       console.log(e)

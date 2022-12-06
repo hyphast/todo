@@ -28,10 +28,11 @@ export const NewTodo: FC<NewTodoProps> = ({ dispatch }) => {
   }
   const onFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     const create = async () => {
+      setIsUploading(true)
       const newTodo = {
         title,
         desc,
-        attach: uploadedFiles.map((item) => item.url),
+        attach: uploadedFiles.map((item) => item.name),
         isDone: false,
         expired,
       }
@@ -41,7 +42,11 @@ export const NewTodo: FC<NewTodoProps> = ({ dispatch }) => {
       if (id) {
         const action = createTodo({ ...newTodo, id })
         dispatch(action)
+        setTitle('')
+        setDesc('')
+        setExpired('')
       }
+      setIsUploading(false)
     }
     event.preventDefault()
     create()

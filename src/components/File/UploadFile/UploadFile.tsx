@@ -10,7 +10,6 @@ const MAX_FILES = 3
 export type UploadedFile = {
   id: number
   name: string
-  url: string
 }
 type UploadFileProps = {
   uploadedFiles: UploadedFile[]
@@ -45,11 +44,10 @@ export const UploadFile: FC<UploadFileProps> = ({
     const upload = async () => {
       setIsUploading(true)
       if (event.target.files?.length) {
-        const data = await storageAPI.getFileData(event.target.files[0])
+        const name = await storageAPI.getFileData(event.target.files[0])
 
-        if (data) {
-          const { name, url } = data
-          setUploadedFiles((prev) => [...prev, { id: Date.now(), name, url }])
+        if (name) {
+          setUploadedFiles((prev) => [...prev, { id: Date.now(), name }])
         }
       }
       setIsUploading(false)
