@@ -45,6 +45,7 @@ export const NewTodo: FC<NewTodoProps> = ({ dispatch }) => {
         setTitle('')
         setDesc('')
         setExpired('')
+        setUploadedFiles([])
       }
       setIsUploading(false)
     }
